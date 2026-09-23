@@ -1,0 +1,104 @@
+.result-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-text-faint);
+  margin-top: 0.75rem;
+}
+
+.result-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.result-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.score-block {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.score-ring {
+  --pct: 0;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background:
+    radial-gradient(closest-side, var(--color-graphite) 72%, transparent 73% 100%),
+    conic-gradient(var(--color-ore-bright) calc(var(--pct) * 1%), var(--color-line) 0);
+}
+
+.score-value {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.score-unit {
+  font-size: 0.7rem;
+  color: var(--color-text-faint);
+  margin-top: 0.2rem;
+}
+
+.score-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 180px;
+}
+
+.score-classification {
+  font-size: 1rem;
+  color: var(--color-vein-bright);
+}
+
+.score-classification-muted {
+  color: var(--color-text-faint);
+  font-weight: 500;
+}
+
+.result-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: var(--color-text-dim);
+}
+
+.result-note {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  font-size: 0.83rem;
+  color: var(--color-text-dim);
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.result-note svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  color: var(--color-vein-bright);
+}
+
+.result-note-warn svg {
+  color: var(--color-gold);
+}
+
+.result-note p {
+  margin: 0;
+}

@@ -1,0 +1,89 @@
+.predict-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.predict-form-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.predict-form-head h2 {
+  font-size: 1.2rem;
+  margin-top: 0.25rem;
+}
+
+.sample-btn {
+  font-size: 0.82rem;
+  padding: 0.45rem 0.85rem;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 520px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+}
+
+.field-unit {
+  color: var(--color-text-faint);
+  font-size: 0.78rem;
+}
+
+.field input {
+  background: var(--color-bedrock);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.7rem;
+  font-size: 0.92rem;
+}
+
+.field input:focus {
+  border-color: var(--color-vein-bright);
+}
+
+.field input.input-error {
+  border-color: var(--color-danger);
+}
+
+.field-help {
+  font-size: 0.75rem;
+  color: var(--color-text-faint);
+  min-height: 1em;
+}
+
+.field-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--color-danger);
+}
+
+.submit-btn {
+  justify-content: center;
+  width: 100%;
+}
+
+.spin-icon {
+  animation: spin 0.8s linear infinite;
+}

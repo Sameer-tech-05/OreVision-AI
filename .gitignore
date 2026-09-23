@@ -1,0 +1,27 @@
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/
+npm-debug.log*
+
+# Python
+__pycache__/
+*.pyc
+backend/.venv/
+backend/venv/
+*.egg-info/
+
+# Env files
+.env
+backend/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+
+# Trained model artifacts are optional to version - uncomment to exclude:
+# backend/models/*.joblib

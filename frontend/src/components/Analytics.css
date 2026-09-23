@@ -1,0 +1,44 @@
+.analytics {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.analytics-head h2 {
+  font-size: 1.2rem;
+  margin: 0.25rem 0 0.4rem;
+}
+
+.analytics-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-faint);
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+.analytics-empty-note {
+  font-size: 0.8rem;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 880px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-card h3 {
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-dim);
+  font-family: var(--font-body);
+  font-weight: 600;
+}
