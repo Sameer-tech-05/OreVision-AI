@@ -48,7 +48,7 @@ export default function Navbar({ activeView, onNavigate, health }) {
           {health ? (
             <span className={`status-pill ${health.model_mode === 'trained' ? 'status-ok' : 'status-warn'}`}>
               <span className="dot" />
-              {health.model_mode === 'trained' ? 'Model live' : 'Demo mode'}
+              {health.model_mode === 'trained' ? 'Model live' : 'Online'}
             </span>
           ) : (
             <span className="status-pill status-error">
