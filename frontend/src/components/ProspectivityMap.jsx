@@ -16,7 +16,11 @@ import {
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
-import { predictProspectivity } from '../services/api.js'
+import {
+  predictProspectivity,
+  getGSILocations,
+  getProspectivityOverlayUrl,
+} from '../services/api.js'
 import FeatureAnalysis from './FeatureAnalysis.jsx'
 import PredictionReport from './PredictionReport.jsx'
 import PredictionPDFReport from './PredictionPDFReport.jsx'
@@ -811,28 +815,38 @@ export default function ProspectivityMap({
   // ========================================================
 
   useEffect(() => {
-    fetch(
-      '/api/prospectivity/gsi-locations'
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            'Failed to load GSI locations'
-          )
+    let cancelled = false
+
+    async function loadGSILocations() {
+      try {
+        const data = await getGSILocations()
+
+        if (cancelled) {
+          return
         }
 
-        return response.json()
-      })
-      .then((data) => {
         setGsiLocations(
           Array.isArray(data)
             ? data
-            : data.locations || []
+            : data?.locations || []
         )
-      })
-      .catch(() => {
-        setGsiLocations([])
-      })
+      } catch (error) {
+        console.error(
+          'Failed to load GSI locations:',
+          error
+        )
+
+        if (!cancelled) {
+          setGsiLocations([])
+        }
+      }
+    }
+
+    loadGSILocations()
+
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   // ========================================================
@@ -908,7 +922,7 @@ export default function ProspectivityMap({
   // ========================================================
 
   const overlayUrl =
-    '/api/prospectivity/web-overlay'
+    getProspectivityOverlayUrl()
 
   // ========================================================
   // ACTIVE VALUES
