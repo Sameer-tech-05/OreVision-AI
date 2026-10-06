@@ -1,0 +1,12 @@
+backend/data/processed/sentinel2/expanded/features/Expanded_NDVI.tif filter=lfs diff=lfs merge=lfs -text
+backend/data/processed/sentinel2/expanded/features/Expanded_NDMI.tif filter=lfs diff=lfs merge=lfs -text
+backend/data/processed/sentinel2/expanded/features/Expanded_B04_B02.tif filter=lfs diff=lfs merge=lfs -text
+backend/data/processed/sentinel2/expanded/features/Expanded_B04_B11.tif filter=lfs diff=lfs merge=lfs -text
+backend/data/processed/sentinel2/expanded/features/Expanded_B11_B12.tif filter=lfs diff=lfs merge=lfs -text
+backend/data/processed/sentinel2/expanded/features/Expanded_valid_mask.tif filter=lfs diff=lfs merge=lfs -text
+backend/data/processed/prospectivity/Iron_Ore_Prospectivity_Probability.tif filter=lfs diff=lfs merge=lfs -text
+backend/data/processed/prospectivity/Iron_Ore_Prospectivity_Class.tif filter=lfs diff=lfs merge=lfs -text
+backend/data/processed/prospectivity/OreVision_AI_Prospectivity_Probability.tif filter=lfs diff=lfs merge=lfs -text
+backend/data/processed/prospectivity/OreVision_AI_Prospectivity_Class_Color.tif filter=lfs diff=lfs merge=lfs -text
+backend/data/processed/prospectivity/Iron_Ore_Prospectivity_WebOverlay.png filter=lfs diff=lfs merge=lfs -text
+backend/data/processed/prospectivity/Iron_Ore_Prospectivity_Preview.png filter=lfs diff=lfs merge=lfs -text
