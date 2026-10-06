@@ -1,3 +1,8 @@
+/* ============================================================
+   OREVISION AI
+   APP LAYOUT & SHARED STYLES
+   ============================================================ */
+
 .app-shell {
   min-height: 100vh;
   display: flex;
@@ -7,21 +12,25 @@
 .app-main {
   flex: 1;
   width: 100%;
-  max-width: 1180px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 2rem 1.5rem 4rem;
 }
 
-@media (max-width: 640px) {
-  .app-main {
-    padding: 1.25rem 1rem 3rem;
-  }
+.analytics-view {
+  min-height: 100%;
 }
 
-/* ---------- Shared primitives ---------- */
+/* ============================================================
+   SHARED PRIMITIVES
+   ============================================================ */
 
 .card {
-  background: linear-gradient(180deg, var(--color-graphite-raised), var(--color-graphite));
+  background: linear-gradient(
+    180deg,
+    var(--color-graphite-raised),
+    var(--color-graphite)
+  );
   border: 1px solid var(--color-line);
   border-radius: var(--radius-md);
   padding: 1.5rem;
@@ -34,6 +43,10 @@
   color: var(--color-text-faint);
 }
 
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -44,7 +57,10 @@
   font-size: 0.92rem;
   font-weight: 500;
   cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .btn:active {
@@ -53,7 +69,7 @@
 
 .btn-primary {
   background: var(--color-ore);
-  color: #1A130E;
+  color: #1a130e;
   font-weight: 600;
 }
 
@@ -62,8 +78,8 @@
 }
 
 .btn-primary:disabled {
-  background: #5A4636;
-  color: #9C9088;
+  background: #5a4636;
+  color: #9c9088;
   cursor: not-allowed;
 }
 
@@ -77,6 +93,10 @@
   border-color: var(--color-vein-bright);
   color: var(--color-vein-bright);
 }
+
+/* ============================================================
+   STATUS
+   ============================================================ */
 
 .status-pill {
   display: inline-flex;
@@ -95,14 +115,35 @@
   border-radius: 50%;
 }
 
-.status-ok { color: var(--color-vein-bright); }
-.status-ok .dot { background: var(--color-vein-bright); box-shadow: 0 0 8px var(--color-vein-bright); }
+.status-ok {
+  color: var(--color-vein-bright);
+}
 
-.status-warn { color: var(--color-gold); }
-.status-warn .dot { background: var(--color-gold); box-shadow: 0 0 8px var(--color-gold); }
+.status-ok .dot {
+  background: var(--color-vein-bright);
+  box-shadow: 0 0 8px var(--color-vein-bright);
+}
 
-.status-error { color: var(--color-danger); }
-.status-error .dot { background: var(--color-danger); }
+.status-warn {
+  color: var(--color-gold);
+}
+
+.status-warn .dot {
+  background: var(--color-gold);
+  box-shadow: 0 0 8px var(--color-gold);
+}
+
+.status-error {
+  color: var(--color-danger);
+}
+
+.status-error .dot {
+  background: var(--color-danger);
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
 
 .empty-state {
   border: 1px dashed var(--color-line);
@@ -112,14 +153,22 @@
   color: var(--color-text-dim);
 }
 
+/* ============================================================
+   ERROR
+   ============================================================ */
+
 .error-banner {
   border: 1px solid rgba(193, 84, 60, 0.4);
   background: rgba(193, 84, 60, 0.12);
-  color: #F0B5A6;
+  color: #f0b5a6;
   border-radius: var(--radius-sm);
   padding: 0.85rem 1rem;
   font-size: 0.9rem;
 }
+
+/* ============================================================
+   SPINNER
+   ============================================================ */
 
 .spinner {
   width: 18px;
@@ -131,18 +180,36 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
+
+/* ============================================================
+   PREDICTION PAGE LAYOUT
+   ============================================================ */
 
 .predict-view {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
   gap: 1.5rem;
   align-items: start;
 }
 
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
 @media (max-width: 880px) {
   .predict-view {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-main {
+    padding: 1.25rem 1rem 3rem;
   }
 }

@@ -1,196 +1,357 @@
 import { useState } from 'react'
-import { Loader2, Send, AlertTriangle } from 'lucide-react'
-import { predictProspectivity, ApiError } from '../services/api.js'
-import './PredictionForm.css'
+import { predictProspectivity } from '../services/api.js'
+import './Prediction.css'
 
-const FIELDS = [
+const EXAMPLE_LOCATION = {
+  latitude: '15.194444',
+  longitude: '76.677778',
+}
+
+const FEATURES = [
   {
-    name: 'latitude',
-    label: 'Latitude',
-    unit: 'degrees',
-    placeholder: 'e.g. 22.35',
-    min: -90,
-    max: 90,
-    help: 'Decimal degrees, -90 to 90',
+    name: 'NDVI',
+    description: 'Vegetation index',
   },
   {
-    name: 'longitude',
-    label: 'Longitude',
-    unit: 'degrees',
-    placeholder: 'e.g. 85.32',
-    min: -180,
-    max: 180,
-    help: 'Decimal degrees, -180 to 180',
+    name: 'NDMI',
+    description: 'Moisture index',
   },
   {
-    name: 'magnetic_anomaly',
-    label: 'Magnetic anomaly',
-    unit: 'nT',
-    placeholder: 'e.g. 145.6',
-    help: 'From aeromagnetic survey data',
+    name: 'B04_B02',
+    description: 'Red / Blue ratio',
   },
   {
-    name: 'gravity_anomaly',
-    label: 'Gravity anomaly',
-    unit: 'mGal',
-    placeholder: 'e.g. 12.4',
-    help: 'Bouguer gravity anomaly',
+    name: 'B04_B11',
+    description: 'Red / SWIR ratio',
   },
   {
-    name: 'geological_indicator',
-    label: 'Geological indicator',
-    unit: '0-1',
-    placeholder: 'e.g. 0.72',
-    min: 0,
-    max: 1,
-    help: 'Normalized lithology / mineralogy favorability',
-  },
-  {
-    name: 'distance_to_fault_km',
-    label: 'Distance to fault',
-    unit: 'km',
-    placeholder: 'e.g. 3.1',
-    min: 0,
-    help: 'Distance to nearest mapped fault',
-  },
-  {
-    name: 'remote_sensing_index',
-    label: 'Remote sensing index',
-    unit: '-1 to 1',
-    placeholder: 'e.g. 0.45',
-    min: -1,
-    max: 1,
-    help: 'e.g. iron-oxide spectral index',
+    name: 'B11_B12',
+    description: 'SWIR ratio',
   },
 ]
 
-const EMPTY_FORM = FIELDS.reduce((acc, f) => ({ ...acc, [f.name]: '' }), {})
-
 export default function PredictionForm({ onResult }) {
-  const [form, setForm] = useState(EMPTY_FORM)
-  const [errors, setErrors] = useState({})
-  const [submitting, setSubmitting] = useState(false)
-  const [apiError, setApiError] = useState(null)
+  const [latitude, setLatitude] = useState('')
+  const [longitude, setLongitude] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleChange = (name, value) => {
-    setForm((prev) => ({ ...prev, [name]: value }))
-    setErrors((prev) => ({ ...prev, [name]: undefined }))
-  }
+  const validateCoordinates = () => {
+    const lat = Number(latitude)
+    const lon = Number(longitude)
 
-  const validate = () => {
-    const nextErrors = {}
-    for (const field of FIELDS) {
-      const raw = form[field.name]
-      if (raw === '' || raw === null || raw === undefined) {
-        nextErrors[field.name] = 'Required'
-        continue
-      }
-      const num = Number(raw)
-      if (Number.isNaN(num)) {
-        nextErrors[field.name] = 'Must be a number'
-        continue
-      }
-      if (field.min !== undefined && num < field.min) {
-        nextErrors[field.name] = `Must be ≥ ${field.min}`
-      }
-      if (field.max !== undefined && num > field.max) {
-        nextErrors[field.name] = `Must be ≤ ${field.max}`
-      }
+    if (!latitude || !longitude) {
+      return 'Please enter both latitude and longitude.'
     }
-    setErrors(nextErrors)
-    return Object.keys(nextErrors).length === 0
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+      return 'Latitude and longitude must be valid numbers.'
+    }
+
+    if (lat < -90 || lat > 90) {
+      return 'Latitude must be between -90 and 90.'
+    }
+
+    if (lon < -180 || lon > 180) {
+      return 'Longitude must be between -180 and 180.'
+    }
+
+    return ''
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setApiError(null)
-    if (!validate()) return
+  const handleSubmit = async (event) => {
+    event.preventDefault()
 
-    setSubmitting(true)
+    setError('')
+
+    const validationError = validateCoordinates()
+
+    if (validationError) {
+      setError(validationError)
+      return
+    }
+
+    setLoading(true)
+
     try {
-      const payload = Object.fromEntries(
-        FIELDS.map((f) => [f.name, Number(form[f.name])]),
-      )
-      const result = await predictProspectivity(payload)
-      onResult(result)
-    } catch (err) {
-      if (err instanceof ApiError) {
-        setApiError(err.message)
-      } else {
-        setApiError('Unexpected error while predicting. Please try again.')
+      const result = await predictProspectivity({
+        latitude: Number(latitude),
+        longitude: Number(longitude),
+      })
+
+      if (onResult) {
+        onResult(result)
       }
+    } catch (err) {
+      setError(
+        err?.message ||
+          'Prediction failed. Please check the backend connection.'
+      )
     } finally {
-      setSubmitting(false)
+      setLoading(false)
     }
   }
 
-  const fillSample = () => {
-    setForm({
-      latitude: '22.35',
-      longitude: '85.32',
-      magnetic_anomaly: '145.6',
-      gravity_anomaly: '12.4',
-      geological_indicator: '0.72',
-      distance_to_fault_km: '3.1',
-      remote_sensing_index: '0.45',
-    })
-    setErrors({})
+  const handleUseExample = () => {
+    setLatitude(EXAMPLE_LOCATION.latitude)
+    setLongitude(EXAMPLE_LOCATION.longitude)
+    setError('')
+  }
+
+  const handleReset = () => {
+    setLatitude('')
+    setLongitude('')
+    setError('')
   }
 
   return (
-    <form className="card predict-form" onSubmit={handleSubmit} noValidate>
-      <div className="predict-form-head">
-        <div>
-          <span className="eyebrow">AI PREDICTION</span>
-          <h2>Score a location</h2>
-        </div>
-        <button type="button" className="btn btn-ghost sample-btn" onClick={fillSample}>
-          Use sample values
-        </button>
-      </div>
+    <section className="prediction-form-card">
 
-      <div className="field-grid">
-        {FIELDS.map((field) => (
-          <div className="field" key={field.name}>
-            <label htmlFor={field.name}>
-              {field.label} <span className="field-unit">({field.unit})</span>
-            </label>
-            <input
-              id={field.name}
-              name={field.name}
-              type="number"
-              step="any"
-              inputMode="decimal"
-              placeholder={field.placeholder}
-              value={form[field.name]}
-              onChange={(e) => handleChange(field.name, e.target.value)}
-              aria-invalid={!!errors[field.name]}
-              aria-describedby={`${field.name}-help`}
-              className={errors[field.name] ? 'input-error' : ''}
-            />
-            <span id={`${field.name}-help`} className="field-help">
-              {errors[field.name] ? (
-                <span className="field-error">
-                  <AlertTriangle size={12} /> {errors[field.name]}
-                </span>
-              ) : (
-                field.help
-              )}
-            </span>
+      {/* HEADER */}
+      <div className="prediction-form-header">
+
+        <div className="prediction-form-title-group">
+
+          <div className="prediction-form-icon">
+            ◎
           </div>
-        ))}
+
+          <div>
+            <span className="prediction-eyebrow">
+              OREVISION AI · PREDICTION ENGINE
+            </span>
+
+            <h2>
+              Analyze a location
+            </h2>
+
+            <p>
+              Enter geographic coordinates to estimate iron ore
+              prospectivity using Sentinel-2 spectral features
+              and the validated XGBoost model.
+            </p>
+          </div>
+
+        </div>
+
+        <div className="prediction-input-status">
+          <span className="status-dot"></span>
+          AI ENGINE READY
+        </div>
+
       </div>
 
-      {apiError && (
-        <div className="error-banner" role="alert">
-          {apiError}
-        </div>
-      )}
+      {/* FORM */}
+      <form
+        className="coordinate-form"
+        onSubmit={handleSubmit}
+      >
 
-      <button type="submit" className="btn btn-primary submit-btn" disabled={submitting}>
-        {submitting ? <Loader2 size={16} className="spin-icon" /> : <Send size={16} />}
-        {submitting ? 'Scoring location…' : 'Predict prospectivity'}
-      </button>
-    </form>
+        <div className="coordinate-fields">
+
+          {/* LATITUDE */}
+          <div className="coordinate-field">
+
+            <label>
+              <span>LATITUDE</span>
+              <span>−90 to 90</span>
+            </label>
+
+            <div className="coordinate-input-wrapper">
+
+              <div className="coordinate-symbol">
+                ↕
+              </div>
+
+              <input
+                type="number"
+                step="any"
+                value={latitude}
+                onChange={(event) =>
+                  setLatitude(event.target.value)
+                }
+                placeholder="15.194444"
+                disabled={loading}
+              />
+
+              <span className="coordinate-unit">
+                °N
+              </span>
+
+            </div>
+
+          </div>
+
+          {/* LONGITUDE */}
+          <div className="coordinate-field">
+
+            <label>
+              <span>LONGITUDE</span>
+              <span>−180 to 180</span>
+            </label>
+
+            <div className="coordinate-input-wrapper">
+
+              <div className="coordinate-symbol">
+                ↔
+              </div>
+
+              <input
+                type="number"
+                step="any"
+                value={longitude}
+                onChange={(event) =>
+                  setLongitude(event.target.value)
+                }
+                placeholder="76.677778"
+                disabled={loading}
+              />
+
+              <span className="coordinate-unit">
+                °E
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* EXAMPLE */}
+        <div className="example-location">
+
+          <div className="example-location-icon">
+            ⌖
+          </div>
+
+          <div className="example-location-content">
+
+            <span>
+              EXAMPLE STUDY-AREA LOCATION
+            </span>
+
+            <strong>
+              15.194444° N, 76.677778° E
+            </strong>
+
+            <small>
+              Toranagallu / Sandur study area
+            </small>
+
+          </div>
+
+          <button
+            type="button"
+            className="use-example-button"
+            onClick={handleUseExample}
+            disabled={loading}
+          >
+            Use example
+          </button>
+
+        </div>
+
+        {/* ERROR */}
+        {error && (
+          <div className="prediction-form-error">
+
+            <span>
+              !
+            </span>
+
+            <div>
+              <strong>
+                Prediction unavailable
+              </strong>
+
+              <p>
+                {error}
+              </p>
+            </div>
+
+          </div>
+        )}
+
+        {/* ACTIONS */}
+        <div className="prediction-form-actions">
+
+          <button
+            type="submit"
+            className="run-prediction-button"
+            disabled={loading}
+          >
+
+            {loading ? (
+              <>
+                <span className="prediction-spinner"></span>
+                Analyzing...
+              </>
+            ) : (
+              <>
+                ◎
+                Run AI prediction
+              </>
+            )}
+
+          </button>
+
+          <button
+            type="button"
+            className="reset-prediction-button"
+            onClick={handleReset}
+            disabled={loading}
+          >
+            Reset
+          </button>
+
+        </div>
+
+      </form>
+
+      {/* FEATURES */}
+      <div className="prediction-input-footer">
+
+        <div className="input-footer-heading">
+
+          <span>
+            SENTINEL-2 SPECTRAL FEATURES
+          </span>
+
+          <small>
+            5 model inputs
+          </small>
+
+        </div>
+
+        <div className="prediction-feature-list">
+
+          {FEATURES.map((feature) => (
+            <div
+              className="prediction-feature-item"
+              key={feature.name}
+            >
+
+              <div className="feature-item-icon">
+                ◆
+              </div>
+
+              <div>
+                <strong>
+                  {feature.name}
+                </strong>
+
+                <small>
+                  {feature.description}
+                </small>
+              </div>
+
+            </div>
+          ))}
+
+        </div>
+
+      </div>
+
+    </section>
   )
 }

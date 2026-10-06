@@ -1,5 +1,6 @@
 # Node
 node_modules/
+frontend/node_modules/
 frontend/dist/
 frontend/.vite/
 npm-debug.log*
@@ -11,7 +12,7 @@ backend/.venv/
 backend/venv/
 *.egg-info/
 
-# Env files
+# Environment
 .env
 backend/.env
 
@@ -23,5 +24,18 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Trained model artifacts are optional to version - uncomment to exclude:
+# Large raw satellite data
+backend/data/raw/
+*.SAFE/
+*.zip
+
+# Large generated raster files
+*.tif
+*.tiff
+
+# Keep trained XGBoost models and metrics
 # backend/models/*.joblib
+
+
+# Generated project data
+backend/data/processed/

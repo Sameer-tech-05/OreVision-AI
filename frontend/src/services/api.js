@@ -1,8 +1,8 @@
 // OreVision AI - API service layer
-// Every function here mirrors an endpoint defined in backend/app/main.py.
-// Field names sent to /api/predict MUST match backend/app/schemas.py::PredictionRequest exactly.
+// API functions used by the React frontend.
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || '/api'
 
 class ApiError extends Error {
   constructor(message, status, detail) {
@@ -15,9 +15,13 @@ class ApiError extends Error {
 
 async function request(path, options = {}) {
   let response
+
   try {
     response = await fetch(`${API_BASE_URL}${path}`, {
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options.headers || {}),
+      },
       ...options,
     })
   } catch (networkErr) {
@@ -29,15 +33,23 @@ async function request(path, options = {}) {
   }
 
   let data = null
+
   try {
     data = await response.json()
   } catch {
-    // response had no JSON body
+    // Response had no JSON body.
   }
 
   if (!response.ok) {
-    const detail = data?.detail || `Request failed with status ${response.status}`
-    throw new ApiError(detail, response.status, data)
+    const detail =
+      data?.detail ||
+      `Request failed with status ${response.status}`
+
+    throw new ApiError(
+      detail,
+      response.status,
+      data,
+    )
   }
 
   return data
@@ -47,28 +59,78 @@ export async function getHealth() {
   return request('/health')
 }
 
-// features: {
-//   latitude, longitude, magnetic_anomaly, gravity_anomaly,
-//   geological_indicator, distance_to_fault_km, remote_sensing_index
-// }
-export async function predictProspectivity(features) {
-  return request('/predict', {
+/*
+ * Coordinate-based prospectivity prediction.
+ *
+ * The backend automatically:
+ *
+ * latitude + longitude
+ *        ↓
+ * Sentinel-2 raster sampling
+ *        ↓
+ * NDVI
+ * NDMI
+ * B04_B02
+ * B04_B11
+ * B11_B12
+ *        ↓
+ * Validated XGBoost
+ *        ↓
+ * Prospectivity result
+ *
+ * Expected input:
+ *
+ * {
+ *   latitude: 15.194444,
+ *   longitude: 76.677778
+ * }
+ */
+export async function predictProspectivity(location) {
+  return request('/predict-location', {
     method: 'POST',
-    body: JSON.stringify(features),
+    body: JSON.stringify({
+      latitude: Number(location.latitude),
+      longitude: Number(location.longitude),
+    }),
   })
 }
 
+/*
+ * Legacy grid endpoint.
+ *
+ * Kept because other parts of the existing
+ * application may still use the grid API.
+ */
 export async function getGrid(bounds) {
   const params = new URLSearchParams()
+
   if (bounds) {
-    if (bounds.minLat !== undefined) params.set('min_lat', bounds.minLat)
-    if (bounds.maxLat !== undefined) params.set('max_lat', bounds.maxLat)
-    if (bounds.minLon !== undefined) params.set('min_lon', bounds.minLon)
-    if (bounds.maxLon !== undefined) params.set('max_lon', bounds.maxLon)
-    if (bounds.step !== undefined) params.set('step', bounds.step)
+    if (bounds.minLat !== undefined) {
+      params.set('min_lat', bounds.minLat)
+    }
+
+    if (bounds.maxLat !== undefined) {
+      params.set('max_lat', bounds.maxLat)
+    }
+
+    if (bounds.minLon !== undefined) {
+      params.set('min_lon', bounds.minLon)
+    }
+
+    if (bounds.maxLon !== undefined) {
+      params.set('max_lon', bounds.maxLon)
+    }
+
+    if (bounds.step !== undefined) {
+      params.set('step', bounds.step)
+    }
   }
+
   const qs = params.toString()
-  return request(`/grid${qs ? `?${qs}` : ''}`)
+
+  return request(
+    `/grid${qs ? `?${qs}` : ''}`,
+  )
 }
 
 export { ApiError }

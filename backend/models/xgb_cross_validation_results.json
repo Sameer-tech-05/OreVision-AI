@@ -1,0 +1,85 @@
+{
+    "dataset": "Combined_Training_Data.csv",
+    "total_samples": 326,
+    "positive_samples": 26,
+    "background_samples": 300,
+    "features": [
+        "NDVI",
+        "NDMI",
+        "B04_B02",
+        "B04_B11",
+        "B11_B12"
+    ],
+    "cross_validation": "Stratified 5-Fold",
+    "random_state": 42,
+    "scale_pos_weight": 11.538461538461538,
+    "best_model": "Model_C",
+    "best_mean_roc_auc": 0.6741111111111111,
+    "models": {
+        "Model_A": {
+            "parameters": {
+                "n_estimators": 150,
+                "max_depth": 2,
+                "learning_rate": 0.05
+            },
+            "roc_auc_mean": 0.664888888888889,
+            "roc_auc_std": 0.10594571169783365,
+            "accuracy_mean": 0.8222843822843823,
+            "precision_mean": 0.16130952380952382,
+            "recall_mean": 0.3066666666666667,
+            "f1_mean": 0.20320346320346322
+        },
+        "Model_B": {
+            "parameters": {
+                "n_estimators": 250,
+                "max_depth": 3,
+                "learning_rate": 0.05
+            },
+            "roc_auc_mean": 0.674,
+            "roc_auc_std": 0.10661248623975629,
+            "accuracy_mean": 0.8774358974358976,
+            "precision_mean": 0.19444444444444445,
+            "recall_mean": 0.22666666666666666,
+            "f1_mean": 0.20376068376068374
+        },
+        "Model_C": {
+            "parameters": {
+                "n_estimators": 350,
+                "max_depth": 3,
+                "learning_rate": 0.03
+            },
+            "roc_auc_mean": 0.6741111111111111,
+            "roc_auc_std": 0.0962645531726547,
+            "accuracy_mean": 0.8682517482517482,
+            "precision_mean": 0.16857142857142854,
+            "recall_mean": 0.18666666666666668,
+            "f1_mean": 0.17222222222222222
+        },
+        "Model_D": {
+            "parameters": {
+                "n_estimators": 250,
+                "max_depth": 4,
+                "learning_rate": 0.03
+            },
+            "roc_auc_mean": 0.6637777777777778,
+            "roc_auc_std": 0.1140599798892919,
+            "accuracy_mean": 0.8682517482517482,
+            "precision_mean": 0.16857142857142854,
+            "recall_mean": 0.18666666666666668,
+            "f1_mean": 0.17222222222222222
+        },
+        "Model_E": {
+            "parameters": {
+                "n_estimators": 400,
+                "max_depth": 2,
+                "learning_rate": 0.03
+            },
+            "roc_auc_mean": 0.6658888888888889,
+            "roc_auc_std": 0.0876156026467917,
+            "accuracy_mean": 0.8438228438228439,
+            "precision_mean": 0.17714285714285713,
+            "recall_mean": 0.26666666666666666,
+            "f1_mean": 0.2066666666666667
+        }
+    }
+}

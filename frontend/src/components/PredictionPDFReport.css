@@ -1,0 +1,259 @@
+.pdf-report-section {
+  margin-top: 24px;
+  padding: 26px;
+  border: 1px solid var(--border-color, #273449);
+  border-radius: 18px;
+  background: var(--card-bg, #111827);
+  color: var(--text-color, #e5e7eb);
+}
+
+.pdf-report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.pdf-report-eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #60a5fa;
+}
+
+.pdf-report-header h2 {
+  margin: 6px 0;
+  font-size: 24px;
+}
+
+.pdf-report-header p {
+  margin: 0;
+  color: #94a3b8;
+}
+
+.pdf-report-print-btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #2563eb;
+  color: white;
+}
+
+.pdf-report-result {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.pdf-report-result > div {
+  padding: 20px;
+  border-radius: 14px;
+  background: #172033;
+  border: 1px solid #26344a;
+}
+
+.pdf-report-result span {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.pdf-report-result strong {
+  font-size: 28px;
+}
+
+.pdf-report-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.pdf-report-card {
+  margin-bottom: 16px;
+  padding: 20px;
+  border-radius: 14px;
+  background: #151d2d;
+  border: 1px solid #26344a;
+}
+
+.pdf-report-card h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+}
+
+.pdf-report-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 9px 0;
+  border-bottom: 1px solid #243044;
+}
+
+.pdf-report-row:last-child {
+  border-bottom: 0;
+}
+
+.pdf-report-row span {
+  color: #94a3b8;
+}
+
+.pdf-report-row b {
+  text-align: right;
+  word-break: break-word;
+}
+
+.pdf-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.pdf-feature-item {
+  padding: 14px;
+  border-radius: 12px;
+  background: #101827;
+  border: 1px solid #26344a;
+}
+
+.pdf-feature-item span {
+  display: block;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.pdf-feature-item small {
+  display: block;
+  min-height: 34px;
+  margin: 5px 0 10px;
+  color: #94a3b8;
+}
+
+.pdf-feature-item strong {
+  font-size: 17px;
+}
+
+.pdf-report-text {
+  line-height: 1.7;
+  color: #cbd5e1;
+}
+
+.pdf-report-disclaimer {
+  padding: 18px;
+  border-radius: 12px;
+  background: #211b0d;
+  border: 1px solid #66521e;
+}
+
+.pdf-report-disclaimer strong {
+  color: #fbbf24;
+}
+
+.pdf-report-disclaimer p {
+  margin-bottom: 0;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.pdf-report-footer {
+  margin-top: 20px;
+  text-align: center;
+  color: #64748b;
+  font-size: 12px;
+}
+
+@media (max-width: 800px) {
+  .pdf-report-header {
+    flex-direction: column;
+  }
+
+  .pdf-report-grid,
+  .pdf-report-result {
+    grid-template-columns: 1fr;
+  }
+
+  .pdf-feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .pdf-report-section {
+    padding: 16px;
+  }
+
+  .pdf-feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  body {
+    background: white !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .pdf-report-section,
+  .pdf-report-section * {
+    visibility: visible;
+  }
+
+  .pdf-report-section {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 25px;
+    border: 0;
+    border-radius: 0;
+    background: white !important;
+    color: #111827 !important;
+  }
+
+  .pdf-report-print-btn {
+    display: none;
+  }
+
+  .pdf-report-card,
+  .pdf-report-result > div {
+    background: white !important;
+    color: #111827 !important;
+    border-color: #d1d5db !important;
+  }
+
+  .pdf-report-row,
+  .pdf-report-row span,
+  .pdf-report-text {
+    color: #111827 !important;
+  }
+
+  .pdf-report-result strong,
+  .pdf-report-card h3,
+  .pdf-feature-item strong,
+  .pdf-feature-item span {
+    color: #111827 !important;
+  }
+
+  .pdf-report-disclaimer {
+    background: #fff8df !important;
+    border-color: #d6b84c !important;
+    color: #111827 !important;
+  }
+
+  .pdf-report-disclaimer p {
+    color: #374151 !important;
+  }
+
+  .pdf-report-footer {
+    color: #6b7280 !important;
+  }
+}

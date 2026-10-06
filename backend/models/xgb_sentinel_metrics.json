@@ -1,0 +1,38 @@
+{
+    "model": "XGBoost Classifier",
+    "features": [
+        "NDVI",
+        "NDMI",
+        "B04_B02",
+        "B04_B11",
+        "B11_B12"
+    ],
+    "total_samples": 326,
+    "training_samples": 260,
+    "testing_samples": 66,
+    "positive_samples": 26,
+    "background_samples": 300,
+    "scale_pos_weight": 11.380952380952381,
+    "accuracy": 0.8787878787878788,
+    "precision": 0.2,
+    "recall": 0.2,
+    "f1_score": 0.2,
+    "roc_auc": 0.4868852459016394,
+    "confusion_matrix": [
+        [
+            57,
+            4
+        ],
+        [
+            4,
+            1
+        ]
+    ],
+    "feature_importance": {
+        "NDMI": 0.23472744226455688,
+        "B11_B12": 0.22412261366844177,
+        "B04_B11": 0.21471288800239563,
+        "B04_B02": 0.17236599326133728,
+        "NDVI": 0.15407098829746246
+    }
+}
