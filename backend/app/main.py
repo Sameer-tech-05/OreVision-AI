@@ -902,25 +902,6 @@ def health():
             DATA_SOURCE,
     }
 
-# ==========================================
-# RASTER FILE SIZE CHECK
-# ==========================================
-
-@app.get("/api/file-sizes")
-def file_sizes():
-    def size_mb(path):
-        if not path.exists():
-            return None
-        return round(path.stat().st_size / (1024 * 1024), 2)
-
-    return {
-        "probability_map": size_mb(PROBABILITY_MAP),
-        "probability_download": size_mb(PROBABILITY_DOWNLOAD_MAP),
-        "class_map": size_mb(CLASS_MAP),
-        "class_download": size_mb(CLASS_DOWNLOAD_MAP),
-    }
-
-
 # ============================================================
 # PROSPECTIVITY INFORMATION
 # ============================================================
